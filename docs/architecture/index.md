@@ -1,11 +1,16 @@
 # Arquitetura
 
+> **Mudança de escopo (2026-11-06):** produto só em português (ver nota no topo de `docs/prd/index.md`).
+> As rotas continuam com o prefixo `/pt/...` (menor risco que remover o segmento `[lang]` de todas as
+> páginas já construídas), mas `en`/`es` saem de `locales`, sem páginas, dicionários nem seletor de idioma
+> para eles. Detalhe da remoção: story de remoção de EN/ES em `docs/stories/`.
+
 ## Stack
 | Camada | Tecnologia |
 |---|---|
 | App web | Next.js (App Router) + TypeScript, em `web/` |
 | Estilo | Tailwind CSS com tokens próprios (`web/src/app/globals.css`) |
-| Idiomas | Suporte nativo do Next.js 16: rotas `app/[lang]`, `next/root-params`, `src/proxy.ts`; dicionários JSON em `src/i18n/` (padrão `pt`) |
+| Idioma | Só português. Rotas continuam em `app/[lang]` com `locales = ['pt']` (sem seletor); `src/proxy.ts` redireciona tudo para `/pt`; dicionário único em `src/i18n/dictionaries/pt.json` |
 | Banco/Auth/Arquivos | Supabase: Postgres + RLS, Auth (link mágico + Google), Storage, Edge Functions, Cron |
 | Vídeo | YouTube IFrame Player API (vídeos não listados) com controles próprios; adaptador Bunny Stream para o futuro |
 | Pagamentos | Lowify (checkout + webhook), atrás da interface `BillingProvider` |
@@ -52,9 +57,9 @@ web/src/
   app/api/                    play, events, webhooks/lowify, push
   components/ui/              componentes base do design system
   components/player/          Player + adaptadores youtube/bunny
-  config/site.ts              nome, URLs, idiomas
-  i18n/                       idiomas: config.ts, dictionaries.ts, dictionaries/{pt,en,es}.json
-  proxy.ts                    redireciona para o idioma certo (cookie ou navegador)
+  config/site.ts              nome, URLs
+  i18n/                       config.ts (locales = ['pt']), dictionaries.ts, dictionaries/pt.json
+  proxy.ts                    redireciona tudo para /pt
   lib/supabase/               clientes server/browser
   lib/billing/                BillingProvider + lowify
   lib/analytics/track.ts      coleta de eventos
@@ -92,8 +97,10 @@ web/src/
 - **Cobrança**: `plans`, `plan_prices`, `subscriptions`, `billing_events`, `coupons`
 - **Catálogo**: `titles` (kind: series|movie, slug, status, featured), `title_translations`, `seasons`, `episodes`
   (video_provider, video_ref, duration_s, intro_start_s, intro_end_s, credits_start_s, release_at, is_free),
-  `episode_translations`, `subtitles`, `genres`, `title_genres`
-- **Landing pages**: `landing_pages` (title_id, locale, blocks jsonb, status), `landing_variants`
+  `episode_translations`, `subtitles`, `genres`, `title_genres`. As tabelas `*_translations`/`subtitles`/`genres`
+  continuam com coluna/linha por idioma (schema não mudou com a remoção de EN/ES) — só a linha `pt` é usada
+  agora; manter assim custa nada e evita reescrever o schema se o produto voltar a ser multilíngue no futuro.
+- **Landing pages**: `landing_pages` (title_id, locale, blocks jsonb, status — só `pt` usado), `landing_variants`
 - **Uso**: `watch_progress`, `my_list`, `title_follows`, `reminders`
 - **Notificações**: `push_subscriptions`, `notification_preferences`, `notification_templates`,
   `notification_campaigns`, `notification_automations`, `notification_deliveries`, `inbox_items`
