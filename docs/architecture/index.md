@@ -15,15 +15,22 @@
 | Testes | Vitest (unidade), Playwright (e2e) |
 
 ## Ambientes
+Por enquanto há **um único projeto Supabase**, usado em todos os lugares:
+
 | Ambiente | Supabase | Onde é usado |
 |---|---|---|
-| **Teste** | projeto `dorama-streaming` (ref `ifcjsfkkotzzztpocfnz`, São Paulo) | máquina local (`web/.env.local`) e previews da Vercel |
-| **Produção** | projeto `dorama-streaming-prod` (ref `ouaxabinmihkuoooozzf`, São Paulo) | só o ambiente Production da Vercel |
+| **Único (teste por enquanto)** | organização "Doraminha", ref `uktrllgocaxweijgbixm` (us-east-1), `https://uktrllgocaxweijgbixm.supabase.co` | máquina local (`web/.env.local`) e Vercel (previews e Production) |
+| **Produção** | **pendente** — a criar na mesma conta/organização antes do lançamento | só o ambiente Production da Vercel |
 
+- **Pendente antes do lançamento:** criar o banco de produção separado (pedido do Gustavo) na conta nova. O plano
+  gratuito permite 2 projetos ativos. Ao criar, aplicar todas as migrations de `supabase/migrations/` em ordem e
+  apontar só o ambiente Production da Vercel para ele.
+- Os projetos antigos da conta "SAAS Gustavo" (`dorama-streaming`, ref `ifcjsfkkotzzztpocfnz`, e
+  `dorama-streaming-prod`, ref `ouaxabinmihkuoooozzf`) **ficaram sem uso** e não são mais acessados por este app.
 - Toda mudança de banco é uma migration em `supabase/migrations/`, aplicada **primeiro no teste**, testada, e só
   depois em produção. Nunca editar o banco de produção à mão.
-- Os dois projetos estão no plano gratuito: ficam pausados após 7 dias sem uso. Antes do lançamento, passar a
-  produção para o plano Pro (sem pausa, com backups diários).
+- Plano gratuito: projetos ficam pausados após 7 dias sem uso. Antes do lançamento, passar a produção para o plano
+  Pro (sem pausa, com backups diários).
 
 ## Visão geral
 ```
