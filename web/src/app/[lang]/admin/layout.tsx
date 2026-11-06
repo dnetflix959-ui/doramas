@@ -23,6 +23,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link href={localePath(lang, "/admin/titulos")} className="text-text hover:text-accent">
               Títulos
             </Link>
+            <Link href={localePath(lang, "/admin/generos")} className="text-text hover:text-accent">
+              Gêneros
+            </Link>
           </nav>
           <Link href={localePath(lang, "/")} className="ml-auto text-sm text-muted hover:text-text">
             Voltar ao site
