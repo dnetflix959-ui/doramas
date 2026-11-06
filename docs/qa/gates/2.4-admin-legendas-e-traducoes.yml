@@ -1,0 +1,38 @@
+schema: 1
+story: '2.4'
+gate: CONCERNS
+status_reason: >-
+  Os 6 critérios de aceite estão implementados: bucket de Storage com RLS testada via SQL, upload de legenda
+  com validação de extensão/tamanho, tradução de episódio, CRUD de gêneros com bloqueio de exclusão em uso.
+  Um achado medium fica registrado: saveTitleGenres() pode perder os gêneros de um título em silêncio se o
+  insert falhar depois do delete (sem transação, sem erro mostrado ao admin).
+reviewer: 'Quinn'
+reviewed_revision: 'commit:0355a4e'
+updated: '2026-11-06T23:55:00Z'
+top_issues:
+  - id: 'REL-002'
+    severity: medium
+    verdict: CONFIRMED
+    finding: >-
+      saveTitleGenres() (generos/actions.ts) faz DELETE de todas as linhas de title_genres do título e depois
+      INSERT das selecionadas, como duas chamadas separadas (não numa transação) e sem checar o `error` de
+      nenhuma das duas. Se o INSERT falhar — por exemplo, um genre_id selecionado no formulário foi apagado
+      por outra aba entre o carregamento da página e o salvar, violando a FK — o DELETE já foi aplicado e o
+      título fica sem nenhum gênero, sem nenhum aviso ao admin. O formulário é uma Server Action simples (sem
+      useActionState), então não há como mostrar erro mesmo que fosse checado.
+    suggested_action: >-
+      Checar o `error` de ambas as chamadas e, no mínimo, logar/redirecionar com uma mensagem se o insert
+      falhar; idealmente envolver delete+insert numa função SQL (como ingest_analytics/is_admin já fazem
+      noutras stories) para atomicidade real.
+  - id: 'TEST-007'
+    severity: low
+    finding: >-
+      Mesmo padrão já apontado em stories anteriores (TEST-003 da 2.2, TEST-005 da 2.3): Server Actions sem
+      useActionState (createSeason, deleteSeason, saveTitleGenres, deleteGenre) descartam erros do Supabase
+      silenciosamente. Acumula como débito técnico do padrão, não é novo nesta story além do REL-002 acima.
+    suggested_action: 'Considerar um padrão comum de "Server Action com feedback" para essas ações simples, reaproveitável nas quatro stories do épico.'
+  - id: 'TEST-004'
+    severity: low
+    finding: 'Fluxo completo logado como admin ainda sem teste (herdado desde a story 2.1) — falta login de admin no ambiente.'
+    suggested_action: 'Mesmo encaminhamento das stories anteriores: testar manualmente assim que houver login de admin.'
+waiver: { active: false }
