@@ -53,6 +53,35 @@
     "movie": "Filme",
     "new": "Novo"
   },
+  "auth": {
+    "title": "Entrar",
+    "headline": "Seu próximo capítulo começa aqui.",
+    "lede": "Sem senha para lembrar: mandamos um link de acesso para o seu e-mail.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "voce@exemplo.com",
+    "submit": "Receber link de acesso",
+    "sending": "Enviando…",
+    "or": "ou",
+    "google": "Continuar com Google",
+    "sentTitle": "Confira seu e-mail",
+    "sentBody": "Enviamos um link para {email}. Abra no mesmo aparelho para entrar. O link vale por 1 hora.",
+    "useAnother": "Usar outro e-mail",
+    "invalidEmail": "Digite um e-mail válido, como voce@exemplo.com.",
+    "sendError": "Não conseguimos enviar o link agora. Espere um minuto e tente de novo.",
+    "linkError": "Esse link expirou ou já foi usado. Peça um novo abaixo.",
+    "googleError": "Não deu para entrar com o Google agora. Use o link por e-mail.",
+    "terms": "Ao entrar, você concorda com os Termos de uso e a Política de privacidade."
+  },
+  "account": {
+    "title": "Sua conta",
+    "email": "E-mail",
+    "profiles": "Perfis",
+    "profilesNote": "Até 4 perfis por conta, cada um com sua lista e seu progresso.",
+    "subscription": "Assinatura",
+    "noSubscription": "Você ainda não assina. Os planos chegam em breve.",
+    "signOut": "Sair",
+    "loading": "Carregando sua conta…"
+  },
   "footer": {
     "language": "Idioma",
     "note": "Doramas originais criados com inteligência artificial."

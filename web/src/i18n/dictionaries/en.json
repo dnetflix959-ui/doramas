@@ -53,6 +53,35 @@
     "movie": "Film",
     "new": "New"
   },
+  "auth": {
+    "title": "Sign in",
+    "headline": "Your next chapter starts here.",
+    "lede": "No password to remember: we'll email you a sign-in link.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "submit": "Email me a sign-in link",
+    "sending": "Sending…",
+    "or": "or",
+    "google": "Continue with Google",
+    "sentTitle": "Check your inbox",
+    "sentBody": "We sent a link to {email}. Open it on this device to sign in. It's valid for 1 hour.",
+    "useAnother": "Use a different email",
+    "invalidEmail": "Enter a valid email, like you@example.com.",
+    "sendError": "We couldn't send the link right now. Wait a minute and try again.",
+    "linkError": "That link has expired or was already used. Request a new one below.",
+    "googleError": "Google sign-in isn't available right now. Use the email link instead.",
+    "terms": "By signing in, you agree to the Terms of Use and Privacy Policy."
+  },
+  "account": {
+    "title": "Your account",
+    "email": "Email",
+    "profiles": "Profiles",
+    "profilesNote": "Up to 4 profiles per account, each with its own list and progress.",
+    "subscription": "Subscription",
+    "noSubscription": "You're not subscribed yet. Plans are coming soon.",
+    "signOut": "Sign out",
+    "loading": "Loading your account…"
+  },
   "footer": {
     "language": "Language",
     "note": "Original K-dramas made with artificial intelligence."

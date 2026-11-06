@@ -23,13 +23,13 @@ export function Input({ label, hint, error, id, className, ...props }: InputProp
         className={cn(
           "h-11 rounded-md border bg-surface-2 px-3 text-base text-text placeholder:text-muted",
           "transition-colors duration-150 focus:border-text focus:outline-none",
-          error ? "border-accent" : "border-line",
+          error ? "border-seal" : "border-line",
           className,
         )}
         {...props}
       />
       {error ? (
-        <p id={`${inputId}-error`} className="text-sm text-accent">
+        <p id={`${inputId}-error`} className="text-sm text-seal">
           {error}
         </p>
       ) : hint ? (
