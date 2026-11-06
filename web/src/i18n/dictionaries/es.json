@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "description": "Doramas originales, un capítulo nuevo cada semana."
+  },
+  "nav": {
+    "main": "Principal",
+    "today": "Hoy",
+    "guide": "Programación",
+    "explore": "Explorar",
+    "myList": "Mi lista",
+    "profile": "Perfil",
+    "notifications": "Avisos",
+    "account": "Perfil y cuenta"
+  },
+  "cover": {
+    "eyebrow": "Portada de la semana",
+    "chapter": "Capítulo {n}",
+    "premiere": "Estreno",
+    "every": "cada {day}, {time}",
+    "watchFirst": "Ver capítulo 1",
+    "save": "Guardar en mi lista",
+    "new": "Nuevo"
+  },
+  "continue": {
+    "title": "Te quedaste aquí",
+    "chapterLine": "Capítulo {n} · {title}",
+    "watched": "Visto {pct}%"
+  },
+  "guide": {
+    "title": "Programación de la semana",
+    "seeAll": "Ver programación completa",
+    "days": "Días de la semana",
+    "empty": "No hay estrenos este día. Buen momento para ponerte al día con tu lista.",
+    "premieres": "{n} estrenos",
+    "today": "hoy",
+    "chapterLine": "Capítulo {n} · {title}",
+    "weekdays": ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
+    "weekdaysLong": ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
+  },
+  "shelf": {
+    "title": "¿Qué quieres sentir hoy?",
+    "all": "Todo",
+    "moods": {
+      "suspirar": "Para suspirar",
+      "chorar": "Para llorar",
+      "rir": "Para reír",
+      "tensao": "Para morderse las uñas",
+      "historico": "Históricos"
+    }
+  },
+  "card": {
+    "chapters": "{n} capítulos",
+    "movie": "Película",
+    "new": "Nuevo"
+  },
+  "footer": {
+    "language": "Idioma",
+    "note": "Doramas originales creados con inteligencia artificial."
+  }
+}

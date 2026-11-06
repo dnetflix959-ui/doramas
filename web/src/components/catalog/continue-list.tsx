@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Play } from "lucide-react";
+import { format, type Dictionary } from "@/i18n/config";
 
 export interface ContinueItem {
   href: string;
@@ -11,13 +12,13 @@ export interface ContinueItem {
 }
 
 /** Capítulos em andamento, em lista (não carrossel), com marcador de página como progresso. */
-export function ContinueList({ items }: { items: ContinueItem[] }) {
+export function ContinueList({ items, t }: { items: ContinueItem[]; t: Dictionary["continue"] }) {
   if (items.length === 0) return null;
 
   return (
     <section aria-labelledby="continuar" className="mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-14">
       <h2 id="continuar" className="font-display text-2xl font-bold">
-        Você parou aqui
+        {t.title}
       </h2>
 
       <ul className="mt-4 grid gap-3 md:grid-cols-2">
@@ -39,12 +40,12 @@ export function ContinueList({ items }: { items: ContinueItem[] }) {
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold">{item.name}</p>
                   <p className="truncate text-sm text-muted">
-                    Capítulo {item.chapter} · {item.chapterTitle}
+                    {format(t.chapterLine, { n: item.chapter, title: item.chapterTitle })}
                   </p>
                   <div
                     className="mt-2 h-0.5 bg-line"
                     role="progressbar"
-                    aria-label={`Assistido ${pct}%`}
+                    aria-label={format(t.watched, { pct })}
                     aria-valuenow={pct}
                     aria-valuemin={0}
                     aria-valuemax={100}

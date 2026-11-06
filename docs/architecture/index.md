@@ -5,7 +5,7 @@
 |---|---|
 | App web | Next.js (App Router) + TypeScript, em `web/` |
 | Estilo | Tailwind CSS com tokens próprios (`web/src/app/globals.css`) |
-| Idiomas | next-intl, rotas `/pt`, `/en`, `/es` (padrão `pt`) |
+| Idiomas | Suporte nativo do Next.js 16: rotas `app/[lang]`, `next/root-params`, `src/proxy.ts`; dicionários JSON em `src/i18n/` (padrão `pt`) |
 | Banco/Auth/Arquivos | Supabase: Postgres + RLS, Auth (link mágico + Google), Storage, Edge Functions, Cron |
 | Vídeo | YouTube IFrame Player API (vídeos não listados) com controles próprios; adaptador Bunny Stream para o futuro |
 | Pagamentos | Lowify (checkout + webhook), atrás da interface `BillingProvider` |

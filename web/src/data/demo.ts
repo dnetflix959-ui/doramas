@@ -1,17 +1,8 @@
 // Dados de exemplo só para a página de demonstração do design system.
-// Serão substituídos pelo catálogo do Supabase no Épico 2.
+// Serão substituídos pelo catálogo do Supabase no Épico 2, que terá traduções por idioma.
+// Por enquanto o conteúdo (nomes, sinopses) fica só em português; a interface já é traduzida.
 
 export type Mood = "suspirar" | "chorar" | "rir" | "tensao" | "historico";
-
-export const moods: { id: Mood; label: string }[] = [
-  { id: "suspirar", label: "Para suspirar" },
-  { id: "chorar", label: "Para chorar" },
-  { id: "rir", label: "Para rir" },
-  { id: "tensao", label: "Para roer as unhas" },
-  { id: "historico", label: "Histórico" },
-];
-
-export const weekdays = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"] as const;
 
 export interface DemoTitle {
   slug: string;
@@ -47,7 +38,7 @@ export const demoTitles: DemoTitle[] = [
       "Uma tradutora brasileira aceita um trabalho temporário em Seul e divide o apartamento com o chef que ela mais criticou na internet.",
     tone: "#6E3B34",
     releaseDay: 4,
-    releaseTime: "20h",
+    releaseTime: "20:00",
     watching: { chapter: 7, chapterTitle: "O jantar de quinta", progress: 0.62 },
     nextChapter: { number: 8, title: "A receita da avó" },
     isNew: true,
@@ -63,7 +54,7 @@ export const demoTitles: DemoTitle[] = [
     synopsis: "Toda noite, às 23h47, o último trem de Busan para numa estação que não existe no mapa.",
     tone: "#25343B",
     releaseDay: 1,
-    releaseTime: "21h",
+    releaseTime: "21:00",
     watching: { chapter: 3, chapterTitle: "Plataforma 0", progress: 0.18 },
     nextChapter: { number: 5, title: "Quem desceu primeiro" },
   },
@@ -89,7 +80,7 @@ export const demoTitles: DemoTitle[] = [
       "Na dinastia Joseon, uma criada descobre que o príncipe herdeiro é um impostor — e decide guardar o segredo.",
     tone: "#3D2E45",
     releaseDay: 2,
-    releaseTime: "20h",
+    releaseTime: "20:00",
     nextChapter: { number: 4, title: "O selo do rei" },
     isNew: true,
   },
@@ -115,7 +106,7 @@ export const demoTitles: DemoTitle[] = [
     synopsis: "Uma programadora encontra uma falha que pode derrubar o maior banco da Coreia em 72 horas.",
     tone: "#22304A",
     releaseDay: 5,
-    releaseTime: "22h",
+    releaseTime: "22:00",
     nextChapter: { number: 6, title: "Senha mestra" },
   },
   {
@@ -139,7 +130,7 @@ export const demoTitles: DemoTitle[] = [
     synopsis: "Dois irmãos separados na infância se reencontram em lados opostos de uma investigação.",
     tone: "#43262A",
     releaseDay: 0,
-    releaseTime: "21h",
+    releaseTime: "21:00",
     nextChapter: { number: 11, title: "O nome verdadeiro" },
   },
 ];

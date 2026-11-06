@@ -7,12 +7,13 @@ export interface TitleCardProps {
   name: string;
   meta: string;
   tone: string;
-  isNew?: boolean;
+  /** Texto do carimbo "Novo" no idioma atual; ausente quando o título não é novo. */
+  newLabel?: string;
   className?: string;
 }
 
 /** Cartão de título com lombada: faixa lateral com o nome na vertical, como um livro na estante. */
-export function TitleCard({ href, name, meta, tone, isNew, className }: TitleCardProps) {
+export function TitleCard({ href, name, meta, tone, newLabel, className }: TitleCardProps) {
   return (
     <Link href={href} className={cn("group block", className)}>
       <div
@@ -29,7 +30,7 @@ export function TitleCard({ href, name, meta, tone, isNew, className }: TitleCar
         {/* Capa: arte provisória até existir imagem real */}
         <div className="relative flex flex-1 flex-col justify-end p-3">
           <span className="font-display text-lg leading-tight font-bold text-text sm:text-xl">{name}</span>
-          {isNew ? <Seal className="absolute top-3 right-3">Novo</Seal> : null}
+          {newLabel ? <Seal className="absolute top-3 right-3">{newLabel}</Seal> : null}
         </div>
       </div>
 

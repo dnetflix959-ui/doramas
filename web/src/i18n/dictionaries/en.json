@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "description": "Original K-dramas, a new chapter every week."
+  },
+  "nav": {
+    "main": "Main",
+    "today": "Today",
+    "guide": "Schedule",
+    "explore": "Browse",
+    "myList": "My list",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "account": "Profile and account"
+  },
+  "cover": {
+    "eyebrow": "This week's cover",
+    "chapter": "Chapter {n}",
+    "premiere": "New chapters",
+    "every": "every {day}, {time}",
+    "watchFirst": "Watch chapter 1",
+    "save": "Save to my list",
+    "new": "New"
+  },
+  "continue": {
+    "title": "Pick up where you left off",
+    "chapterLine": "Chapter {n} · {title}",
+    "watched": "{pct}% watched"
+  },
+  "guide": {
+    "title": "This week's schedule",
+    "seeAll": "Full schedule",
+    "days": "Days of the week",
+    "empty": "Nothing new this day. A good moment to catch up on your list.",
+    "premieres": "{n} new chapters",
+    "today": "today",
+    "chapterLine": "Chapter {n} · {title}",
+    "weekdays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "weekdaysLong": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+  },
+  "shelf": {
+    "title": "What do you feel like today?",
+    "all": "Everything",
+    "moods": {
+      "suspirar": "Swoon-worthy",
+      "chorar": "Have a good cry",
+      "rir": "Feel-good laughs",
+      "tensao": "Edge of your seat",
+      "historico": "Period dramas"
+    }
+  },
+  "card": {
+    "chapters": "{n} chapters",
+    "movie": "Film",
+    "new": "New"
+  },
+  "footer": {
+    "language": "Language",
+    "note": "Original K-dramas made with artificial intelligence."
+  }
+}

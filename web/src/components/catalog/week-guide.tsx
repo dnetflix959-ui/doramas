@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useSyncExternalStore } from "react";
+import { format, type Dictionary } from "@/i18n/config";
 import { cn } from "@/lib/cn";
 
 const noopSubscribe = () => () => {};
@@ -25,7 +26,15 @@ export interface GuideEntry {
 }
 
 /** Grade da semana: o que estreia em cada dia. Hoje começa selecionado. */
-export function WeekGuide({ entries, days }: { entries: GuideEntry[]; days: readonly string[] }) {
+export function WeekGuide({
+  entries,
+  seeAllHref,
+  t,
+}: {
+  entries: GuideEntry[];
+  seeAllHref: string;
+  t: Dictionary["guide"];
+}) {
   const today = useToday();
   const [picked, setSelected] = useState<number | null>(null);
   const firstWithEntries = entries.length > 0 ? Math.min(...entries.map((e) => e.day)) : 0;
@@ -36,15 +45,15 @@ export function WeekGuide({ entries, days }: { entries: GuideEntry[]; days: read
     <section aria-labelledby="grade" className="mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-14">
       <div className="flex items-baseline justify-between gap-4">
         <h2 id="grade" className="font-display text-2xl font-bold">
-          Grade da semana
+          {t.title}
         </h2>
-        <Link href="/grade" className="text-sm text-muted underline-offset-4 hover:text-text hover:underline">
-          Ver grade completa
+        <Link href={seeAllHref} className="text-sm text-muted underline-offset-4 hover:text-text hover:underline">
+          {t.seeAll}
         </Link>
       </div>
 
-      <div role="tablist" aria-label="Dias da semana" className="mt-4 grid grid-cols-7 border border-line">
-        {days.map((label, i) => {
+      <div role="tablist" aria-label={t.days} className="mt-4 grid grid-cols-7 border border-line">
+        {t.weekdays.map((label, i) => {
           const count = entries.filter((e) => e.day === i).length;
           const active = i === selected;
           return (
@@ -61,12 +70,12 @@ export function WeekGuide({ entries, days }: { entries: GuideEntry[]; days: read
               )}
             >
               <span>{label}</span>
-              <span className="flex gap-0.5" aria-label={`${count} estreias`}>
+              <span className="flex gap-0.5" aria-label={format(t.premieres, { n: count })}>
                 {Array.from({ length: count }).map((_, k) => (
                   <span key={k} className={cn("size-1 rounded-full", active ? "bg-accent-ink" : "bg-accent")} />
                 ))}
               </span>
-              {i === today ? <span className="sr-only">(hoje)</span> : null}
+              {i === today ? <span className="sr-only">({t.today})</span> : null}
             </button>
           );
         })}
@@ -74,18 +83,18 @@ export function WeekGuide({ entries, days }: { entries: GuideEntry[]; days: read
 
       <div role="tabpanel" className="border-x border-b border-line">
         {dayEntries.length === 0 ? (
-          <p className="p-5 text-sm text-muted">Nenhuma estreia neste dia. Bom momento para colocar a lista em dia.</p>
+          <p className="p-5 text-sm text-muted">{t.empty}</p>
         ) : (
           <ul className="divide-y divide-line">
             {dayEntries.map((e) => (
               <li key={e.href}>
                 <Link href={e.href} className="flex items-center gap-4 p-4 transition-colors hover:bg-surface">
-                  <span className="w-12 shrink-0 font-display text-lg font-bold text-accent">{e.time}</span>
+                  <span className="w-14 shrink-0 font-display text-lg font-bold text-accent">{e.time}</span>
                   <span className="size-10 shrink-0 rounded-xs" style={{ backgroundColor: e.tone }} aria-hidden />
                   <span className="min-w-0">
                     <span className="block truncate font-semibold">{e.name}</span>
                     <span className="block truncate text-sm text-muted">
-                      Capítulo {e.chapter} · {e.chapterTitle}
+                      {format(t.chapterLine, { n: e.chapter, title: e.chapterTitle })}
                     </span>
                   </span>
                 </Link>
