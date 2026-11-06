@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Gowun_Batang, Instrument_Sans } from "next/font/google";
+import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
 import { site } from "@/config/site";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { htmlLang, locales } from "@/i18n/config";
@@ -43,7 +44,10 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const locale = await getLocale();
   return (
     <html lang={htmlLang[locale]} className={`${gowunBatang.variable} ${instrumentSans.variable} antialiased`}>
-      <body className="min-h-svh">{children}</body>
+      <body className="min-h-svh">
+        <AnalyticsProvider />
+        {children}
+      </body>
     </html>
   );
 }
