@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* Tokens do design system — ver docs/front-end-spec.md */
+:root {
+  --bg: #13171a;
+  --surface: #1b2024;
+  --surface-2: #242a2f;
+  --line: #313840;
+  --text: #f1ebdf;
+  --text-muted: #9aa3a6;
+  --accent: #9cc9b4;
+  --accent-hover: #b2d8c6;
+  --accent-ink: #0f1a15;
+  --seal: #d9774b;
+  --focus: #9cc9b4;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
+  --color-seal: var(--seal);
+
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-gowun-batang), ui-serif, Georgia, serif;
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+html {
+  color-scheme: dark;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01";
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Numeral de capítulo em contorno */
+.numeral-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--text);
+}
+
+/* Texto vertical (lombada e lateral da capa) */
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* Rolagem horizontal sem barra visível */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
