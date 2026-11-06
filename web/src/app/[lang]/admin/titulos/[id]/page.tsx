@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { localePath } from "@/i18n/config";
 import { getLocale } from "@/i18n/dictionaries";
 import { createClient } from "@/lib/supabase/server";
 import { createSeason, deleteSeason } from "../actions";
+import { EpisodeForm, type EpisodeData } from "../episode-form";
 import { TitleForm } from "../title-form";
 
 export const metadata: Metadata = { title: "Editar título · Admin", robots: { index: false } };
@@ -31,6 +33,17 @@ export default async function EditTitlePage({ params, searchParams }: PageProps<
   const { data: seasons } =
     title.kind === "series"
       ? await supabase.from("seasons").select("id, number").eq("title_id", id).order("number")
+      : { data: null };
+
+  const { data: movieEpisode } =
+    title.kind === "movie"
+      ? await supabase
+          .from("episodes")
+          .select(
+            "id, number, video_ref, duration_s, intro_start_s, intro_end_s, credits_start_s, release_at, is_free, status",
+          )
+          .eq("title_id", id)
+          .maybeSingle()
       : { data: null };
 
   return (
@@ -70,7 +83,12 @@ export default async function EditTitlePage({ params, searchParams }: PageProps<
                   key={season.id}
                   className="flex items-center justify-between border border-line bg-surface px-4 py-3"
                 >
-                  <span className="font-semibold">Temporada {season.number}</span>
+                  <a
+                    href={`${localePath(lang, "/admin/titulos")}/${id}/temporadas/${season.id}`}
+                    className="font-semibold hover:text-accent"
+                  >
+                    Temporada {season.number}
+                  </a>
                   <form action={deleteSeason}>
                     <input type="hidden" name="lang" value={lang} />
                     <input type="hidden" name="title_id" value={id} />
@@ -84,7 +102,17 @@ export default async function EditTitlePage({ params, searchParams }: PageProps<
             </ul>
           )}
         </section>
-      ) : null}
+      ) : (
+        <section className="flex flex-col gap-4 border-t border-line pt-8">
+          <h2 className="text-sm font-semibold tracking-[0.2em] text-muted uppercase">Vídeo</h2>
+          <EpisodeForm
+            lang={lang}
+            titleId={id}
+            parent={{ kind: "movie" }}
+            episode={(movieEpisode as EpisodeData | null) ?? undefined}
+          />
+        </section>
+      )}
     </div>
   );
 }

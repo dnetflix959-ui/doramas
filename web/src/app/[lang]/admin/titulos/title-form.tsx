@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { locales, type Locale } from "@/i18n/config";
+import { datetimeLocalToIso, toDatetimeLocalValue } from "@/lib/datetime-local";
 import { saveTitle, type TitleFormState } from "./actions";
 
 const localeLabel: Record<Locale, string> = { pt: "Português", en: "English", es: "Español" };
@@ -37,8 +38,17 @@ export function TitleForm({
   const fieldError = (field: "slug" | "name_pt" | "name_en" | "name_es") =>
     state.status === "error" ? state.fields?.[field] : undefined;
 
+  // Converte "Agendar para" (hora local do navegador) para UTC aqui mesmo, antes de enviar — só o
+  // navegador sabe o próprio fuso. Corrige o achado REL-001 do gate da story 2.2: antes, o servidor
+  // reinterpretava o texto no fuso dele, deslocando o horário a cada edição.
+  function withUtcReleaseAt(formData: FormData) {
+    const raw = formData.get("release_at");
+    formData.set("release_at", datetimeLocalToIso(typeof raw === "string" ? raw : null) ?? "");
+    return formAction(formData);
+  }
+
   return (
-    <form action={formAction} className="flex flex-col gap-8">
+    <form action={withUtcReleaseAt} className="flex flex-col gap-8">
       <input type="hidden" name="lang" value={lang} />
       {title ? <input type="hidden" name="title_id" value={title.id} /> : null}
 
@@ -97,7 +107,8 @@ export function TitleForm({
           label="Agendar para (opcional)"
           name="release_at"
           type="datetime-local"
-          defaultValue={title?.release_at ? title.release_at.slice(0, 16) : undefined}
+          defaultValue={toDatetimeLocalValue(title?.release_at)}
+          hint="Hora do seu navegador."
         />
 
         <label className="flex items-center gap-2 text-sm">

@@ -26,7 +26,9 @@ export async function saveTitle(_prev: TitleFormState, formData: FormData): Prom
   const slug = String(formData.get("slug") ?? "").trim().toLowerCase();
   const status = String(formData.get("status") ?? "draft");
   const featured = formData.get("featured") === "on";
-  const releaseAtRaw = String(formData.get("release_at") ?? "").trim();
+  // Já vem em UTC (ISO): o cliente converte a partir da hora local do navegador antes de enviar
+  // (ver title-form.tsx, withUtcReleaseAt) — o servidor nunca deve reinterpretar esse texto.
+  const releaseAt = String(formData.get("release_at") ?? "").trim() || null;
 
   if (!slugPattern.test(slug) || slug.length > 80) {
     return { status: "error", message: "Link (slug) inválido.", fields: { slug: "Use só letras minúsculas, números e hífen (ex.: amor-em-seul)." } };
@@ -53,7 +55,6 @@ export async function saveTitle(_prev: TitleFormState, formData: FormData): Prom
   }
 
   const supabase = await createClient();
-  const releaseAt = releaseAtRaw ? new Date(releaseAtRaw).toISOString() : null;
 
   let id = titleId;
   if (id) {
