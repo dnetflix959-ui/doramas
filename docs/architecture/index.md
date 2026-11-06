@@ -28,18 +28,18 @@ Navegador (Next.js, PWA, service worker, player próprio + iframe YouTube)
 ## Estrutura de pastas (web/)
 ```
 web/src/
-  app/[locale]/(site)/        páginas públicas: início, título, assistir/[slug] (landing), planos, entrar
-  app/[locale]/(app)/         área do assinante: navegar, título, player, minha lista, busca, conta, avisos
-  app/[locale]/admin/         painel admin
+  app/[lang]/(site)/        páginas públicas: início, título, assistir/[slug] (landing), planos, entrar
+  app/[lang]/(app)/         área do assinante: navegar, título, player, minha lista, busca, conta, avisos
+  app/[lang]/admin/         painel admin
   app/api/                    play, events, webhooks/lowify, push
   components/ui/              componentes base do design system
   components/player/          Player + adaptadores youtube/bunny
   config/site.ts              nome, URLs, idiomas
-  i18n/                       configuração do next-intl
+  i18n/                       idiomas: config.ts, dictionaries.ts, dictionaries/{pt,en,es}.json
+  proxy.ts                    redireciona para o idioma certo (cookie ou navegador)
   lib/supabase/               clientes server/browser
   lib/billing/                BillingProvider + lowify
   lib/analytics/track.ts      coleta de eventos
-  messages/{pt,en,es}.json    textos da interface
 ```
 
 ## Controle de acesso ao vídeo
