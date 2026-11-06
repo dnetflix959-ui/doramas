@@ -1,0 +1,37 @@
+schema: 1
+story: '2.3'
+gate: CONCERNS
+status_reason: >-
+  Os 6 critérios de aceite estão implementados: parser de link do YouTube (13 testes), episódios dentro de
+  temporada e o vídeo único do filme compartilhando o mesmo formulário, e nenhuma leitura nova expõe
+  video_ref fora do admin. O REL-001 da story 2.2 foi corrigido na origem, não só evitado aqui — bom sinal.
+  Dois achados não bloqueantes, de baixo risco, ficam registrados para acompanhamento.
+reviewer: 'Quinn'
+reviewed_revision: 'commit:ba8d4e8'
+updated: '2026-11-06T23:40:00Z'
+top_issues:
+  - id: 'TEST-005'
+    severity: low
+    finding: >-
+      translateDbError() em episode-actions.ts trata toda violação de chave única ("duplicate key") com a
+      mensagem "Já existe um episódio com esse número nesta temporada." Isso é certo para
+      episodes_season_number_uidx (série), mas enganoso para episodes_title_uidx (filme) — se duas abas
+      tentarem criar o vídeo do mesmo filme ao mesmo tempo, a segunda veria uma mensagem sobre "número" e
+      "temporada" que não fazem sentido para um filme.
+    suggested_action: >-
+      Checar o nome da constraint na mensagem (como já é feito com episodes_season_number_uidx) para dar uma
+      mensagem específica ao caso de filme ("Este filme já tem um vídeo cadastrado — atualize a página.").
+  - id: 'TEST-006'
+    severity: low
+    finding: >-
+      Nenhuma validação impede credits_start_s/intro_end_s menores que intro_start_s, ou valores que não
+      fazem sentido entre si (ex.: fim da abertura antes do início). Os critérios de aceite não pediam essa
+      validação cruzada, mas vale registrar como melhoria de qualidade de dados.
+    suggested_action: 'Adicionar uma checagem simples (intro_end_s >= intro_start_s etc.) no Server Action, se o Gustavo achar útil.'
+  - id: 'TEST-004'
+    severity: low
+    finding: >-
+      Fluxo completo logado como admin ainda não testado por ninguém (herdado das stories 2.1/2.2) — falta
+      login de admin disponível no ambiente.
+    suggested_action: 'Mesmo encaminhamento já registrado nas stories anteriores: testar manualmente assim que houver login de admin.'
+waiver: { active: false }
