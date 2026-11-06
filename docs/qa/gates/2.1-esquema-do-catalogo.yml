@@ -1,0 +1,33 @@
+schema: 1
+story: '2.1'
+gate: CONCERNS
+status_reason: >-
+  Os 9 critérios de aceite estão implementados e verificados por SQL direto no banco de teste (RLS,
+  triggers, constraints de unicidade). Um achado não bloqueante fica registrado: nada impede trocar
+  titles.kind de 'series' para 'movie' (ou vice-versa) num título que já tem seasons/episodes, deixando
+  dados órfãos/inconsistentes com o modelo que as triggers de inserção garantem.
+reviewer: 'Quinn'
+reviewed_revision: 'commit:5fa5d3a'
+updated: '2026-11-06T23:10:00Z'
+top_issues:
+  - id: 'REQ-001'
+    severity: medium
+    finding: >-
+      Trocar titles.kind de 'series' para 'movie' (ou o inverso) é permitido mesmo quando o título já tem
+      seasons/episodes ligados ao tipo anterior — confirmado com um teste direto (UPDATE titles SET kind =
+      'movie' com season/episode existentes foi aceito sem erro). As triggers enforce_season_requires_series
+      e enforce_episode_parent só disparam em INSERT/UPDATE de seasons/episodes, não quando titles.kind muda.
+    suggested_action: >-
+      Adicionar um trigger BEFORE UPDATE OF kind em titles que recuse a troca enquanto existir seasons ou
+      episodes ligados ao título (ou, se a troca precisar ser permitida, apagar/migrar o conteúdo antigo
+      explicitamente). Resolver antes da story 2.2 (admin) expor edição de título.
+  - id: 'ARCH-001'
+    severity: low
+    finding: >-
+      Modelagem de filme (episódio direto por title_id, sem season) e as funções SECURITY DEFINER
+      is_title_visible/is_episode_visible são decisões de schema fora dos critérios de aceite originais,
+      já documentadas e justificadas pelo @dev na story — revisão formal do @architect ainda pendente.
+    suggested_action: >-
+      @architect confirmar a modelagem de filme e a necessidade de SECURITY DEFINER antes das stories 2.2/2.3
+      assumirem esse formato (ambas já estão corretas e testadas; é uma confirmação, não um bloqueio).
+waiver: { active: false }
