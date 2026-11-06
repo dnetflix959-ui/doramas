@@ -1,0 +1,36 @@
+schema: 1
+story: '1.4'
+gate: CONCERNS
+status_reason: >-
+  Todos os critérios de aceite foram implementados e verificados (RLS, consentimento, validação
+  e partição testados via SQL; 37 testes unitários, typecheck e lint limpos). Duas lacunas não
+  bloqueantes ficam registradas para acompanhamento: o limite de tamanho do corpo em /api/events
+  pode ser contornado sem o cabeçalho Content-Length, e o limite de taxa é só por sessão (sem
+  limite por IP/global), então trocar o session_id a cada requisição evita o limite.
+reviewer: 'Quinn'
+reviewed_revision: 'commit:83810cf'
+updated: '2026-11-06T23:00:00Z'
+top_issues:
+  - id: 'SEC-001'
+    severity: medium
+    finding: >-
+      O endpoint /api/events só rejeita corpos grandes quando o cliente envia Content-Length;
+      sem esse cabeçalho (ex.: certas requisições chunked), o corpo inteiro é lido e desserializado
+      antes de qualquer validação de tamanho.
+    suggested_action: >-
+      Ler o corpo com um limite de bytes explícito (stream com corte, ou checar o tamanho real após
+      a leitura e descartar antes do JSON.parse) em vez de confiar só no cabeçalho Content-Length.
+  - id: 'SEC-002'
+    severity: medium
+    finding: >-
+      O limite de 300 eventos/min é por session_id (tabela sessions). Como o endpoint é público
+      (anon) e o session_id vem do cliente, trocar o id a cada lote contorna o limite por completo —
+      não há limite por IP nem global.
+    suggested_action: >-
+      Avaliar com @architect um limite adicional por IP (ou outro identificador fora do controle do
+      cliente) antes do lançamento público; registrado como risco pelo @dev desde a expansão da story.
+  - id: 'MNT-001'
+    severity: low
+    finding: 'Variável `accepted` em ingest_analytics() é incrementada mas nunca lida (código morto).'
+    suggested_action: 'Remover a variável ou usá-la num retorno/log, numa próxima migration de ajuste.'
+waiver: { active: false }
