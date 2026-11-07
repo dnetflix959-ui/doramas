@@ -20,9 +20,9 @@ export async function GET(request: NextRequest, ctx: RouteContext<"/api/play/[ep
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  const { data: withinLimit, error: rateLimitError } = await supabase.rpc("check_play_rate_limit", {
-    p_user_id: user.id,
-  });
+  // check_play_rate_limit() usa auth.uid() internamente — nunca passar o id de outro usuário aqui
+  // (achado SEC-003 do QA gate: a versão antiga aceitava um p_user_id arbitrário do chamador).
+  const { data: withinLimit, error: rateLimitError } = await supabase.rpc("check_play_rate_limit");
   if (rateLimitError) {
     console.error("Erro ao checar limite de taxa de /api/play:", rateLimitError);
     return NextResponse.json({ error: "internal_error" }, { status: 500 });
