@@ -11,7 +11,7 @@ type Status = (typeof statuses)[number];
 
 export type TitleFormState =
   | { status: "idle" }
-  | { status: "error"; message: string; fields?: Partial<Record<"slug" | "name_pt" | "name_en" | "name_es", string>> };
+  | { status: "error"; message: string; fields?: Partial<Record<"slug" | "name_pt", string>> };
 
 function readLang(formData: FormData): Locale {
   const value = String(formData.get("lang") ?? "");

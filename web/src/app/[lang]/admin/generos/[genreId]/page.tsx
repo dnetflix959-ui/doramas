@@ -13,7 +13,7 @@ export default async function EditGenrePage({ params }: PageProps<"/[lang]/admin
   const supabase = await createClient();
   const { data: genre } = await supabase
     .from("genres")
-    .select("id, slug, name_pt, name_en, name_es")
+    .select("id, slug, name_pt")
     .eq("id", genreId)
     .maybeSingle();
   if (!genre) notFound();

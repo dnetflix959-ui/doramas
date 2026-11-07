@@ -4,10 +4,8 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { locales, type Locale } from "@/i18n/config";
+import type { Locale } from "@/i18n/config";
 import { saveEpisodeTranslations, saveSubtitle, type SubtitleFormState, type TranslationFormState } from "./episode-content-actions";
-
-const localeLabel: Record<Locale, string> = { pt: "Português", en: "English", es: "Español" };
 
 function UploadButton() {
   const { pending } = useFormStatus();
@@ -18,30 +16,30 @@ function UploadButton() {
   );
 }
 
-function SubtitleUploadRow({
+/** Upload de legenda (.vtt) em português. */
+export function SubtitleUploadForm({
   lang,
   returnTo,
   episodeId,
-  locale,
-  hasSubtitle,
+  existingLocales,
 }: {
   lang: Locale;
   returnTo: string;
   episodeId: string;
-  locale: Locale;
-  hasSubtitle: boolean;
+  existingLocales: Locale[];
 }) {
   const [state, formAction] = useActionState<SubtitleFormState, FormData>(saveSubtitle, { status: "idle" });
+  const hasSubtitle = existingLocales.includes("pt");
 
   return (
-    <form action={formAction} className="flex flex-col gap-2 border-l-2 border-line pl-4">
+    <form action={formAction} className="flex flex-col gap-2">
       <input type="hidden" name="lang" value={lang} />
       <input type="hidden" name="return_to" value={returnTo} />
       <input type="hidden" name="episode_id" value={episodeId} />
-      <input type="hidden" name="locale" value={locale} />
+      <input type="hidden" name="locale" value="pt" />
       <div className="flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1.5 text-sm">
-          <span className="font-medium text-text">{localeLabel[locale]}</span>
+          <span className="font-medium text-text">Legenda (.vtt)</span>
           <input type="file" name="file" accept=".vtt" className="text-sm text-muted" />
         </label>
         <UploadButton />
@@ -54,34 +52,6 @@ function SubtitleUploadRow({
       ) : null}
       {state.status === "saved" ? <p className="text-sm text-muted">Legenda enviada.</p> : null}
     </form>
-  );
-}
-
-/** Upload de legenda (.vtt) por idioma. Um formulário por idioma, cada um com seu próprio estado. */
-export function SubtitleUploadForm({
-  lang,
-  returnTo,
-  episodeId,
-  existingLocales,
-}: {
-  lang: Locale;
-  returnTo: string;
-  episodeId: string;
-  existingLocales: Locale[];
-}) {
-  return (
-    <div className="flex flex-col gap-4">
-      {locales.map((locale) => (
-        <SubtitleUploadRow
-          key={locale}
-          lang={lang}
-          returnTo={returnTo}
-          episodeId={episodeId}
-          locale={locale}
-          hasSubtitle={existingLocales.includes(locale)}
-        />
-      ))}
-    </div>
   );
 }
 
@@ -111,10 +81,10 @@ export function EpisodeTranslationForm({
   const [state, formAction] = useActionState<TranslationFormState, FormData>(saveEpisodeTranslations, {
     status: "idle",
   });
-  const translationFor = (locale: Locale) => translations.find((t) => t.locale === locale);
+  const ptTranslation = translations.find((t) => t.locale === "pt");
 
   return (
-    <form action={formAction} className="flex flex-col gap-6">
+    <form action={formAction} className="flex flex-col gap-3">
       <input type="hidden" name="lang" value={lang} />
       <input type="hidden" name="return_to" value={returnTo} />
       <input type="hidden" name="episode_id" value={episodeId} />
@@ -126,27 +96,19 @@ export function EpisodeTranslationForm({
       ) : null}
       {state.status === "saved" ? <p className="text-sm text-muted">Tradução salva.</p> : null}
 
-      {locales.map((locale) => {
-        const translation = translationFor(locale);
-        return (
-          <div key={locale} className="flex flex-col gap-3 border-l-2 border-line pl-4">
-            <p className="text-sm font-semibold">{localeLabel[locale]}</p>
-            <Input label="Título do episódio" name={`title_${locale}`} defaultValue={translation?.title ?? ""} />
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor={`ep_synopsis_${locale}`} className="text-sm font-medium text-text">
-                Sinopse
-              </label>
-              <textarea
-                id={`ep_synopsis_${locale}`}
-                name={`synopsis_${locale}`}
-                rows={2}
-                defaultValue={translation?.synopsis ?? ""}
-                className="rounded-md border border-line bg-surface-2 px-3 py-2 text-base text-text placeholder:text-muted"
-              />
-            </div>
-          </div>
-        );
-      })}
+      <Input label="Título do episódio" name="title_pt" defaultValue={ptTranslation?.title ?? ""} />
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="ep_synopsis_pt" className="text-sm font-medium text-text">
+          Sinopse
+        </label>
+        <textarea
+          id="ep_synopsis_pt"
+          name="synopsis_pt"
+          rows={2}
+          defaultValue={ptTranslation?.synopsis ?? ""}
+          className="rounded-md border border-line bg-surface-2 px-3 py-2 text-base text-text placeholder:text-muted"
+        />
+      </div>
 
       <SaveButton />
     </form>

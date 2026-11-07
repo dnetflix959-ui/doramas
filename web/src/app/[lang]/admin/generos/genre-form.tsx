@@ -21,11 +21,10 @@ export function GenreForm({
   genre,
 }: {
   lang: Locale;
-  genre?: { id: string; slug: string; name_pt: string; name_en: string; name_es: string };
+  genre?: { id: string; slug: string; name_pt: string };
 }) {
   const [state, formAction] = useActionState<GenreFormState, FormData>(saveGenre, { status: "idle" });
-  const fieldError = (field: "slug" | "name_pt" | "name_en" | "name_es") =>
-    state.status === "error" ? state.fields?.[field] : undefined;
+  const fieldError = (field: "slug" | "name_pt") => (state.status === "error" ? state.fields?.[field] : undefined);
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
@@ -47,9 +46,7 @@ export function GenreForm({
         pattern="^[a-z0-9]+(-[a-z0-9]+)*$"
         error={fieldError("slug")}
       />
-      <Input label="Nome (Português)" name="name_pt" required defaultValue={genre?.name_pt} error={fieldError("name_pt")} />
-      <Input label="Nome (English)" name="name_en" required defaultValue={genre?.name_en} error={fieldError("name_en")} />
-      <Input label="Nome (Español)" name="name_es" required defaultValue={genre?.name_es} error={fieldError("name_es")} />
+      <Input label="Nome" name="name_pt" required defaultValue={genre?.name_pt} error={fieldError("name_pt")} />
 
       <SubmitButton label={genre ? "Salvar" : "Criar gênero"} />
     </form>

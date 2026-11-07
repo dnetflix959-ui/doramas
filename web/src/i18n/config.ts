@@ -1,7 +1,9 @@
 // Configuração de idiomas compartilhada entre servidor, proxy e componentes de cliente.
 import type pt from "./dictionaries/pt.json";
 
-export const locales = ["pt", "en", "es"] as const;
+// Produto só em português (decisão de 2026-11-06, ver docs/prd/index.md). As rotas continuam com o
+// prefixo /pt/... (ver docs/architecture/index.md) — menor risco que remover o segmento [lang].
+export const locales = ["pt"] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = "pt";
 
@@ -9,10 +11,10 @@ export const defaultLocale: Locale = "pt";
 export const localeCookie = "lang";
 
 /** Valor do atributo `lang` do HTML para cada idioma. */
-export const htmlLang: Record<Locale, string> = { pt: "pt-BR", en: "en", es: "es" };
+export const htmlLang: Record<Locale, string> = { pt: "pt-BR" };
 
-/** Nome de cada idioma escrito nele mesmo (para o seletor). */
-export const localeNames: Record<Locale, string> = { pt: "Português", en: "English", es: "Español" };
+/** Nome de cada idioma escrito nele mesmo (sem uso hoje — só 1 idioma, sem seletor). */
+export const localeNames: Record<Locale, string> = { pt: "Português" };
 
 export type Dictionary = typeof pt;
 

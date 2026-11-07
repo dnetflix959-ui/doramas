@@ -4,11 +4,9 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { locales, type Locale } from "@/i18n/config";
+import type { Locale } from "@/i18n/config";
 import { datetimeLocalToIso, toDatetimeLocalValue } from "@/lib/datetime-local";
 import { saveTitle, type TitleFormState } from "./actions";
-
-const localeLabel: Record<Locale, string> = { pt: "Português", en: "English", es: "Español" };
 
 export type TitleTranslation = { locale: Locale; name: string; synopsis: string | null };
 
@@ -34,9 +32,8 @@ export function TitleForm({
   const [state, formAction] = useActionState<TitleFormState, FormData>(saveTitle, { status: "idle" });
   const isEdit = Boolean(title);
 
-  const translationFor = (locale: Locale) => translations?.find((t) => t.locale === locale);
-  const fieldError = (field: "slug" | "name_pt" | "name_en" | "name_es") =>
-    state.status === "error" ? state.fields?.[field] : undefined;
+  const ptTranslation = translations?.find((t) => t.locale === "pt");
+  const fieldError = (field: "slug" | "name_pt") => (state.status === "error" ? state.fields?.[field] : undefined);
 
   // Converte "Agendar para" (hora local do navegador) para UTC aqui mesmo, antes de enviar — só o
   // navegador sabe o próprio fuso. Corrige o achado REL-001 do gate da story 2.2: antes, o servidor
@@ -117,35 +114,27 @@ export function TitleForm({
         </label>
       </section>
 
-      <section className="flex flex-col gap-6">
+      <section className="flex flex-col gap-3">
         <h2 className="text-sm font-semibold tracking-[0.2em] text-muted uppercase">Tradução</h2>
-        {locales.map((locale) => {
-          const translation = translationFor(locale);
-          return (
-            <div key={locale} className="flex flex-col gap-3 border-l-2 border-line pl-4">
-              <p className="text-sm font-semibold">{localeLabel[locale]}</p>
-              <Input
-                label="Nome"
-                name={`name_${locale}`}
-                required={locale === "pt"}
-                defaultValue={translation?.name}
-                error={fieldError(`name_${locale}` as "name_pt" | "name_en" | "name_es")}
-              />
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor={`synopsis_${locale}`} className="text-sm font-medium text-text">
-                  Sinopse
-                </label>
-                <textarea
-                  id={`synopsis_${locale}`}
-                  name={`synopsis_${locale}`}
-                  rows={3}
-                  defaultValue={translation?.synopsis ?? ""}
-                  className="rounded-md border border-line bg-surface-2 px-3 py-2 text-base text-text placeholder:text-muted"
-                />
-              </div>
-            </div>
-          );
-        })}
+        <Input
+          label="Nome"
+          name="name_pt"
+          required
+          defaultValue={ptTranslation?.name}
+          error={fieldError("name_pt")}
+        />
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="synopsis_pt" className="text-sm font-medium text-text">
+            Sinopse
+          </label>
+          <textarea
+            id="synopsis_pt"
+            name="synopsis_pt"
+            rows={3}
+            defaultValue={ptTranslation?.synopsis ?? ""}
+            className="rounded-md border border-line bg-surface-2 px-3 py-2 text-base text-text placeholder:text-muted"
+          />
+        </div>
       </section>
 
       <SubmitButton label={isEdit ? "Salvar" : "Criar título"} />

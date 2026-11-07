@@ -4,8 +4,6 @@ import { hasLocale, type Dictionary, type Locale } from "./config";
 
 const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
   pt: () => import("./dictionaries/pt.json").then((m) => m.default),
-  en: () => import("./dictionaries/en.json").then((m) => m.default),
-  es: () => import("./dictionaries/es.json").then((m) => m.default),
 };
 
 /** Idioma da rota atual (segmento [lang]). Dá 404 para idiomas não suportados. */

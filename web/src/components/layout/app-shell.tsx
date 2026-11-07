@@ -7,7 +7,6 @@ import { Bell, Bookmark, CalendarDays, Compass, Sun, UserRound } from "lucide-re
 import { site } from "@/config/site";
 import { localePath, type Dictionary, type Locale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
-import { LanguageSwitcher } from "./language-switcher";
 
 export interface AppShellProps {
   locale: Locale;
@@ -83,11 +82,10 @@ export function AppShell({ locale, nav: t, footer, children }: AppShellProps) {
       <main className="flex-1">{children}</main>
 
       <footer className="border-t border-line pb-24 md:pb-0">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-14">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-8 lg:px-14">
           <p className="text-sm text-muted">
             <span className="font-display font-bold text-text">{site.name}</span> · {footer.note}
           </p>
-          <LanguageSwitcher current={locale} label={footer.language} />
         </div>
       </footer>
 

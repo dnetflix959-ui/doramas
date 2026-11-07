@@ -14,26 +14,25 @@ function readLang(formData: FormData): Locale {
 
 export type GenreFormState =
   | { status: "idle" }
-  | { status: "error"; message: string; fields?: Partial<Record<"slug" | "name_pt" | "name_en" | "name_es", string>> };
+  | { status: "error"; message: string; fields?: Partial<Record<"slug" | "name_pt", string>> };
 
-/** Cria ou atualiza um gênero (nome nos 3 idiomas — sem tabela de tradução separada, ver story 2.1). */
+/**
+ * Cria ou atualiza um gênero. Só o nome em português — produto só-PT (story 1.5); `genres.name_en`/`name_es`
+ * continuam no schema (não são mais obrigatórias, migration da story 1.5) mas não são preenchidas por aqui.
+ */
 export async function saveGenre(_prev: GenreFormState, formData: FormData): Promise<GenreFormState> {
   const lang = readLang(formData);
   const genreId = String(formData.get("genre_id") ?? "") || null;
   const slug = String(formData.get("slug") ?? "").trim().toLowerCase();
   const namePt = String(formData.get("name_pt") ?? "").trim();
-  const nameEn = String(formData.get("name_en") ?? "").trim();
-  const nameEs = String(formData.get("name_es") ?? "").trim();
 
   if (!slugPattern.test(slug) || slug.length > 50) {
     return { status: "error", message: "Link (slug) inválido.", fields: { slug: "Só letras minúsculas, números e hífen." } };
   }
-  if (!namePt) return { status: "error", message: "Preencha o nome em português.", fields: { name_pt: "Obrigatório." } };
-  if (!nameEn) return { status: "error", message: "Preencha o nome em inglês.", fields: { name_en: "Obrigatório." } };
-  if (!nameEs) return { status: "error", message: "Preencha o nome em espanhol.", fields: { name_es: "Obrigatório." } };
+  if (!namePt) return { status: "error", message: "Preencha o nome.", fields: { name_pt: "Obrigatório." } };
 
   const supabase = await createClient();
-  const row = { slug, name_pt: namePt, name_en: nameEn, name_es: nameEs };
+  const row = { slug, name_pt: namePt };
   const { error } = genreId
     ? await supabase.from("genres").update(row).eq("id", genreId)
     : await supabase.from("genres").insert(row);
