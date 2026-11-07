@@ -1,31 +1,15 @@
 schema: 1
 story: '3.1'
-gate: FAIL
+gate: PASS
 status_reason: >-
-  Achado de segurança confirmado e explorável: check_play_rate_limit(p_user_id) aceita qualquer uuid do
-  chamador, não só o próprio — um usuário autenticado qualquer pode esgotar o limite de taxa de /api/play de
-  outra pessoa via RPC direto, travando a reprodução dela. Reproduzido com um teste SQL que isola o
-  "atacante" de um "alvo" em sessões separadas. Os demais critérios de aceite estão corretos e testados.
+  SEC-003 (high, FAIL anterior) foi corrigido: check_play_rate_limit() agora usa auth.uid() internamente,
+  sem parâmetro — reproduzi o ataque original (atacante autenticado tentando esgotar o limite de outro
+  usuário) e confirmei que não funciona mais; o atacante só consegue afetar o próprio limite. Confirmado
+  também que a assinatura antiga (com p_user_id) foi completamente removida do catálogo (não é possível
+  chamar com argumento). Os demais critérios de aceite continuam corretos (já tinham passado na primeira
+  revisão). Sem achados novos nesta rodada.
 reviewer: 'Quinn'
-reviewed_revision: 'commit:79d3fc8'
-updated: '2026-11-07T00:15:00Z'
-top_issues:
-  - id: 'SEC-003'
-    severity: high
-    verdict: CONFIRMED
-    finding: >-
-      check_play_rate_limit(p_user_id uuid) (migration 20261107050000) é SECURITY DEFINER com EXECUTE
-      liberado para o papel authenticated, e usa o p_user_id recebido como parâmetro sem conferir que é o
-      próprio chamador (auth.uid()). Testei com dois usuários reais via set_config('request.jwt.claims',...):
-      um "atacante" autenticado chamou a função 61 vezes passando o uuid de um "alvo" diferente — a função
-      aceitou normalmente e a 61ª chamada já voltou false (limite estourado) para o uuid do alvo, mesmo sem
-      o alvo nunca ter chamado a função. Isso quebra o modelo de autorização que o resto do projeto segue
-      (ingest_analytics, is_admin etc. sempre usam auth.uid()/auth.jwt() do próprio chamador, nunca um id
-      recebido do cliente) — é um vetor de negação de serviço: qualquer usuário autenticado pode travar a
-      reprodução de outro usuário (/api/play começa a devolver 429) só sabendo o uuid dele.
-    suggested_action: >-
-      Remover o parâmetro p_user_id e usar auth.uid() diretamente dentro da função (mesmo padrão das outras
-      funções do projeto) — ou, se precisar manter o parâmetro por algum motivo, adicionar
-      `if p_user_id <> auth.uid() then raise exception using errcode = '42501'; end if;` logo no início.
-      Atualizar a chamada em route.ts de acordo (pode nem precisar mais passar p_user_id).
+reviewed_revision: 'commit:75420dc'
+updated: '2026-11-07T00:25:00Z'
+top_issues: []
 waiver: { active: false }
