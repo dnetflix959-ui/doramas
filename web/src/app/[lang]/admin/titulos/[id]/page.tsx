@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
 import { localePath, type Locale } from "@/i18n/config";
 import { getLocale } from "@/i18n/dictionaries";
 import { createClient } from "@/lib/supabase/server";
@@ -120,7 +120,14 @@ export default async function EditTitlePage({ params, searchParams }: PageProps<
       ) : (
         <section className="flex flex-col gap-8 border-t border-line pt-8">
           <div className="flex flex-col gap-4">
-            <h2 className="text-sm font-semibold tracking-[0.2em] text-muted uppercase">Vídeo</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold tracking-[0.2em] text-muted uppercase">Vídeo</h2>
+              {movieEpisode ? (
+                <ButtonLink href={`${localePath(lang, "/admin/titulos")}/${id}/assistir`} variant="ghost">
+                  Assistir (teste)
+                </ButtonLink>
+              ) : null}
+            </div>
             <EpisodeForm
               lang={lang}
               titleId={id}

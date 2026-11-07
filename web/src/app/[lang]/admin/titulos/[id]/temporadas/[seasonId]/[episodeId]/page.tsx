@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ButtonLink } from "@/components/ui/button";
 import { localePath, type Locale } from "@/i18n/config";
 import { getLocale } from "@/i18n/dictionaries";
 import { createClient } from "@/lib/supabase/server";
@@ -33,7 +34,12 @@ export default async function EditEpisodePage({
 
   return (
     <div className="flex flex-col gap-10">
-      <h1 className="font-display text-3xl font-bold">Editar episódio {episode.number}</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-display text-3xl font-bold">Editar episódio {episode.number}</h1>
+        <ButtonLink href={`${returnTo}/assistir`} variant="ghost">
+          Assistir (teste)
+        </ButtonLink>
+      </div>
       <EpisodeForm lang={lang} titleId={id} parent={{ kind: "season", seasonId }} episode={episode} />
 
       <section className="flex flex-col gap-4 border-t border-line pt-8">
