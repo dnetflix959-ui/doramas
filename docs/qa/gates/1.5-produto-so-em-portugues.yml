@@ -1,0 +1,25 @@
+schema: 1
+story: '1.5'
+gate: CONCERNS
+status_reason: >-
+  Os 7 critérios de aceite foram atendidos: locales reduzido a pt, seletor de idioma removido, dicionários
+  en/es apagados, formulários do admin simplificados, migration de genres testada antes do formulário parar
+  de enviar name_en/name_es (ordem seguida corretamente), typecheck/lint/59 testes passando. Um achado low
+  de limpeza incompleta fica registrado, não bloqueante.
+reviewer: 'Quinn'
+reviewed_revision: 'commit:6b02342'
+updated: '2026-11-07T00:05:00Z'
+top_issues:
+  - id: 'MNT-004'
+    severity: low
+    verdict: CONFIRMED
+    finding: >-
+      Sobrou código morto e um comentário desatualizado depois da remoção do LanguageSwitcher:
+      switchLocalePath() (i18n/config.ts) não tem mais nenhum chamador no projeto; os comentários de
+      localePath() e switchLocalePath() ainda citam exemplos com "en"/"es" (idiomas que não existem mais); e
+      a chave footer.language em pt.json ficou sem uso (só era lida pelo seletor removido).
+    suggested_action: >-
+      Remover switchLocalePath() (ou documentar que fica guardada para uma eventual reativação multi-idioma),
+      atualizar os comentários de exemplo para refletir locales = ['pt'], e remover footer.language do
+      dicionário se não houver plano de reaproveitá-la.
+waiver: { active: false }
