@@ -51,6 +51,7 @@
   "card": {
     "chapters": "{n} capítulos",
     "movie": "Filme",
+    "series": "Série",
     "new": "Novo"
   },
   "auth": {
