@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { UserRound } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { localePath, type Dictionary, type Locale } from "@/i18n/config";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
@@ -28,12 +28,22 @@ async function AccountDetails({ lang, t }: { lang: Locale; t: Dictionary["accoun
     .select("id, name")
     .order("created_at", { ascending: true });
 
+  const { data: isAdmin } = await supabase.rpc("is_admin");
+
   return (
     <div className="flex flex-col gap-10">
       <section>
         <h2 className="text-sm font-semibold tracking-[0.2em] text-muted uppercase">{t.email}</h2>
         <p className="mt-2 text-lg">{user.email}</p>
       </section>
+
+      {isAdmin ? (
+        <section>
+          <ButtonLink href={`${localePath(lang, "/admin/titulos")}`} variant="secondary">
+            Painel admin
+          </ButtonLink>
+        </section>
+      ) : null}
 
       <section>
         <h2 className="text-sm font-semibold tracking-[0.2em] text-muted uppercase">{t.profiles}</h2>
