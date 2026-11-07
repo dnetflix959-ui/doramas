@@ -1,0 +1,38 @@
+schema: 1
+story: '3.2'
+gate: CONCERNS
+status_reason: >-
+  Implementação sólida e fiel à arquitetura (parâmetros do iframe, host youtube-nocookie.com, camada
+  transparente, atalhos). Um achado alto (plausível, não confirmado por execução — sem sessão de admin
+  disponível para testar num navegador real) pode quebrar o layout do player em todo carregamento; preciso
+  de verificação ao vivo antes de considerar fechado. Testes puros (71) passam; typecheck/lint limpos.
+reviewer: 'Quinn'
+reviewed_revision: 'commit:b7022f0'
+updated: '2026-11-07T00:40:00Z'
+top_issues:
+  - id: 'ARCH-002'
+    severity: high
+    verdict: PLAUSIBLE
+    finding: >-
+      player.tsx passa o próprio `<div ref={containerRef}>` gerenciado pelo React direto para
+      `new YT.Player(container, ...)` (youtube-source.ts). A IFrame API do YouTube, segundo a própria
+      documentação oficial, SUBSTITUI o elemento recebido por um `<iframe>` — não insere o iframe dentro
+      dele. Isso tira o nó do controle do React (que continua achando que aquele `div` existe na árvore) e,
+      mais visível: o `<iframe>` criado pelo YouTube não herda as classes Tailwind do `div` original
+      (`absolute inset-0`), então o vídeo provavelmente não preenche o contêiner responsivo — fica com o
+      tamanho padrão da API (ex.: 640×390) em vez de cobrir o player. Não consegui reproduzir num navegador
+      real (sem sessão de admin disponível nesta sessão), por isso marco como plausível, não confirmado —
+      mas é um comportamento documentado da API, não uma suposição aleatória, e o risco é alto porque afeta
+      a primeira tela que qualquer pessoa vê.
+    suggested_action: >-
+      Testar ao vivo assim que possível (login de admin → "Assistir (teste)") e, se confirmado, usar um
+      `<div>` aninhado só para a API substituir (ex.: `<div ref={containerRef}><div id="yt-target" /></div>`),
+      mantendo o `div` externo sob controle do React, e aplicar CSS garantindo que o `<iframe>` resultante
+      preencha 100% do contêiner (ele não herda classes React).
+  - id: 'PERF-001'
+    severity: low
+    finding: >-
+      O intervalo de `timeupdate` (youtube-source.ts, 250 ms) continua rodando mesmo com o vídeo pausado,
+      fazendo chamadas desnecessárias via postMessage para `getCurrentTime()`/`getDuration()`.
+    suggested_action: 'Pausar o intervalo quando o evento `pause`/`ended` disparar, e retomar em `play`.'
+waiver: { active: false }
